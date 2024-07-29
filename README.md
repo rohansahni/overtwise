@@ -1,4 +1,12 @@
-# overtwise
+![image](https://github.com/user-attachments/assets/542900e4-61a2-44a7-895e-6e6ba79dab43)
+## Problem Statement: 
+- Skilling : With rapid technological change, there is a growing disparity between the skills youth
+possess and those required by the job market. Unequal access to skilling opportunities exacerbates this issue.
+Furthermore, gender inequality and the lack of accessible training for disabled individuals deepen these gaps, limiting
+opportunities for many. Tackling these problems is essential for creating a fair and inclusive job market.
+
+## Our Solution:
+### OVERTWISE
 In today’s rapidly evolving job market, there’s a notable skills gap between what young people 
 possess and what employers seek. This gap is further widened by the lack of accessible training and 
 unequal access to quality education. These challenges create a system where many talented 
