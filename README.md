@@ -48,11 +48,14 @@ Visit `http://localhost:8000/` in your browser to explore OvertWise.
 
 
 ## Features
-- Structured learning paths
-- Community-driven resources
-- Rigorous assessments
-- Mentorship opportunities
-- Real-world exposure
+- Institute Exploration: Students can explore various institutes and their offerings. Each institute has a unique knowledge web, detailing the available programs and courses.
+- Structured Learning Path: Courses, Sub-Courses, and Topics are organized hierarchically. To advance, students must complete assessments at various stages, mimicking the rigorous structure of offline institutions.
+- Qualifying Tests: Before starting a course, students must pass a qualifying test. This ensures readiness and commitment, similar to entrance exams in traditional education systems.
+- Sub-Course Assessments: Students must complete assessments to advance from one sub-course to another. These assessments evaluate understanding and mastery of the sub-course content.
+- Topic Assignments: To progress through topics within a sub-course, students must complete assignments. These assignments reinforce learning and ensure students are keeping up with the coursework.
+- Progress Tracking: Students can track their progress through the roadmap of their chosen institute. Visual indicators show completed and pending assessments, assignments, and qualifying tests.
+- Community Engagement: The platform fosters a sense of community akin to a traditional classroom. Students can interact, discuss, and collaborate, enhancing their learning experience.
+
 
 ## Contributing
 Contributions are welcome! If you’d like to improve OvertWise, follow these steps:
