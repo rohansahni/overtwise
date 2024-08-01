@@ -29,12 +29,12 @@ prepare them comprehensively for life’s challenges.
 Inspired by successful online platforms like Roadmap.sh, The Odin Project (TOP), Coursera, and edX, as well as the quality education provided by top-tier institutes, our application, OvertWise, aims to blend the structured learning of traditional academia with the flexibility and accessibility of online education. Drawing from the innovations in online university programs, our app provides a well-organized, engaging, and graded learning experience. It encourages learners to set clear, meaningful goals—whether it’s mastering coding, delving into physics, exploring neuroscience, or any other subject. We are here to provide a real classroom experience with online top resources.
 
 ## Installation
-1. Clone this repository
+1. Clone this repository: 
    `
    git clone https://github.com/rohansahni/overtwise.git
     cd overtwise
 `
-2. Install dependencies
+2. Install dependencies: 
    `pip install -r requirements.txt`
 3. Set up your database:
    `python manage.py migrate
