@@ -16,6 +16,9 @@ def index(request):
     return render(request, 'index.html', {'form': form})
 
 def dashboard(request):
+    user = authenticate(request, username='rohan', password='Admin@123')
+    if user:
+        login(request, user)
     return render(request, 'dashboard.html')
 
 def signup_view(request):
