@@ -1,16 +1,27 @@
 <!-- Best on mobile with Gesture -->
 {% extends 'index.html' %} {% load static %} {% block content %}
-
-<div class="banner">
-            <div class="line">
-                <span>Click on</span>
-            </div>
-            <div class="line">
-                <span>an institute</span>
-            </div>
-            <div class="line">
-                <span>to continue</span>
-            </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" />
+<div class="popup center">
+  <!-- <div class="icon">
+    <i class="fa fa-bell"></i>
+  </div> -->
+  <div class="title">
+    Hey Ya!
+  </div>
+  <div class="description">
+    Welcome to OvertWise! Ready to learn? Start by clikcing on an Institute on the globe.
+  </div>
+  <div class="dismiss-btn">
+    <button id="dismiss-popup-btn"> 
+      Dismiss
+    </button>
+  </div>
+</div>
+<div class="center">
+  <button id="open-popup-btn" class="open-btn">
+    Open Notification
+  </button>
+   <div class="notif"></div>
 </div>
 
 <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
@@ -22,6 +33,7 @@
 
 
 
+<script src="{% static 'js/dashboard.js' %}"></script>
 <script src="//unpkg.com/globe.gl"></script>
 <div id="globeViz"></div>
 
