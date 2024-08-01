@@ -1,0 +1,114 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway");
+:root {
+  --highlight: #f49c03
+}
+body, html{     
+    user-select: none;  
+}
+body {
+  background: #f3ebe7;
+  font-family: raleway, sans-serif;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.nav {
+  position: fixed;
+  top:0;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  background: var(--highlight);
+  color: #fff;
+  text-align: center;
+  font-size: 25px;
+}
+#nav-text {
+  font-size: 27px;
+}
+#nav-q {
+  position: absolute;
+  padding:0 20px;
+  height: 50px;
+  top:0;
+  right:0;
+  background:#fff;
+  color:var(--highlight)
+}
+
+.button {  
+  height: 70px;
+  line-height: 70px;
+  border:4px solid #333;
+  color: #333;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+#start-title {
+  text-align: center;
+  font-size: 30px;
+}
+#start{ 
+  display:block;
+  margin: 20% auto;
+  width:fit-content;
+  padding:0 20px;
+  font-size:33px
+}
+.button:hover {
+  border-color:var(--highlight)
+}
+.button:active {
+  color: var(--highlight) !important;
+}
+.screen {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+.question {
+  width: 1000px;
+  height: 100vh;
+  margin: 0 auto;
+  margin-top: 50px;
+  overflow: hidden;
+}
+
+.question-text {
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  background: #999;
+  color: #fff;
+  font-size: 20px;
+}
+.question-answers {
+  width: 100%;
+  margin-top:55px;
+  display:flex;
+  justify-content: space-between
+}
+.question-answers .button {
+  flex:1;
+  font-size: 30px;
+  margin:5px
+}
+.question-answers .button:nth-child(3) {
+  margin-right: 0px;
+}
+
+.score-center {
+  font-size:53px;
+  width: 50%;
+  height: 150px;
+  margin: 44px auto;
+  text-align:center;
+}
+#main {
+  background: red;
+  width: 1000px;
+  height: 1000px;
+}

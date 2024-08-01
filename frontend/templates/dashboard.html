@@ -1,0 +1,478 @@
+<!-- Best on mobile with Gesture -->
+{% extends 'index.html' %} {% load static %} {% block content %}
+
+<div class="banner">
+            <div class="line">
+                <span>Click on</span>
+            </div>
+            <div class="line">
+                <span>an institute</span>
+            </div>
+            <div class="line">
+                <span>to continue</span>
+            </div>
+</div>
+
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+<style>
+  body {
+    margin: 0;
+  }
+</style>
+
+
+
+<script src="//unpkg.com/globe.gl"></script>
+<div id="globeViz"></div>
+
+<script>
+  const universities = [
+  
+    {
+      "name": "Harvard University",
+      "abbreviation": "harvard",
+      "latitude": 42.3713,
+      "longitude": -71.1245,
+      "logo": 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Harvard_University_coat_of_arms.svg/150px-Harvard_University_coat_of_arms.svg.png'
+    },
+    {
+      "name": "Panjab University",
+      "abbreviation": "pu",
+      "latitude": 30.757992,
+      "longitude": 76.768208,
+      "logo": 'https://puchd.ac.in/asset/pu-logo.png'
+    },
+    {
+      "name": "Indian Institute of Technology Bombay",
+      "abbreviation": "iitb",
+      "latitude": 19.1335,
+      "longitude": 72.9152,
+      "logo": 'https://upload.wikimedia.org/wikipedia/en/thumb/1/1d/Indian_Institute_of_Technology_Bombay_Logo.svg/150px-Indian_Institute_of_Technology_Bombay_Logo.svg.png'
+    },
+    {
+      "name": "Indian Institute of Technology Kanpur",
+      "abbreviation": "iitk",
+      "latitude": 26.5115,
+      "longitude": 80.2330,
+      "logo": 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a3/IIT_Kanpur_Logo.svg/200px-IIT_Kanpur_Logo.svg.png'
+    },
+    {
+      "name": "Indian Institute of Management Ahmedabad",
+      "abbreviation": "iima",
+      "latitude": 23.1664,
+      "longitude": 72.6369,
+      "logo": 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/IIM%2C_Ahmedabad_Logo.svg/220px-IIM%2C_Ahmedabad_Logo.svg.png' 
+    },
+    {
+      "name": "Massachusetts Institute of Technology",
+      "abbreviation": "mit",
+      "latitude": 42.3601,
+      "longitude": -71.0942,
+      "logo": 'https://upload.wikimedia.org/wikipedia/en/thumb/4/44/MIT_Seal.svg/150px-MIT_Seal.svg.png'
+    },
+    // Add more institutions as needed
+    {
+      "name": "Princeton University",
+      "abbreviation": "princeton",
+      "latitude": 40.3430,
+      "longitude": -74.6514,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Princeton_seal.svg/140px-Princeton_seal.svg.png"
+    },
+    {
+      "name": "Yale University",
+      "abbreviation": "yale",
+      "latitude": 41.3163,
+      "longitude": -72.9223,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Yale_University_Shield_1.svg/150px-Yale_University_Shield_1.svg.png"
+    },
+    {
+      "name": "Columbia University",
+      "abbreviation": "columbia",
+      "latitude": 40.8075,
+      "longitude": -73.9626,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Columbia_coat_of_arms_no_crest.png/180px-Columbia_coat_of_arms_no_crest.png"
+    },
+    {
+      "name": "Cornell University",
+      "abbreviation": "cornell",
+      "latitude": 42.4534,
+      "longitude": -76.4735,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Cornell_University_seal.svg/130px-Cornell_University_seal.svg.png"
+    },
+    {
+      "name": "University of Pennsylvania",
+      "abbreviation": "upenn",
+      "latitude": 39.9522,
+      "longitude": -75.1932,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/UPenn_shield_with_banner.svg/150px-UPenn_shield_with_banner.svg.png"
+    },
+    {
+      "name": "Brown University",
+      "abbreviation": "bu",
+      "latitude": 41.8268,
+      "longitude": -71.4026,
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/5/50/Shield_of_Brown_University.svg/110px-Shield_of_Brown_University.svg.png"
+    },
+    {
+      "name": "Dartmouth College",
+      "abbreviation": "dc",
+      "latitude": 43.7044,
+      "longitude": -72.2887,
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/e/e4/Dartmouth_College_shield.svg/140px-Dartmouth_College_shield.svg.png"
+    },
+    {
+      "name": "Imperial College London",
+      "abbreviation": "icl",
+      "latitude": 51.4988,
+      "longitude": -0.1749,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Shield_of_Imperial_College_London.svg/130px-Shield_of_Imperial_College_London.svg.png"
+    },
+    {
+      "name": "University of Oxford",
+      "abbreviation": "OU",
+      "latitude": 51.7548,
+      "longitude": -1.2544,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Arms_of_University_of_Oxford.svg/150px-Arms_of_University_of_Oxford.svg.png"
+    },
+    {
+      "name": "University of Cambridge",
+      "abbreviation": "UC",
+      "latitude": 52.2043,
+      "longitude": 0.1166,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Coat_of_Arms_of_the_University_of_Cambridge.svg/150px-Coat_of_Arms_of_the_University_of_Cambridge.svg.png"
+    },
+    {
+      "name": "London School of Economics",
+      "abbreviation": "lse",
+      "latitude": 51.5145,
+      "longitude": -0.1160,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/London_School_of_Economics_Coat_of_Arms.svg/150px-London_School_of_Economics_Coat_of_Arms.svg.png"
+    },
+    {
+      "name": "Stanford University",
+      "abbreviation": "su",
+      "latitude": 37.4275,
+      "longitude": -122.1697,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Seal_of_Leland_Stanford_Junior_University.svg/150px-Seal_of_Leland_Stanford_Junior_University.svg.png"
+    },
+    {
+      "name": "California Institute of Technology",
+      "abbreviation": "caltech",
+      "latitude": 34.1377,
+      "longitude": -118.1253,
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Seal_of_the_California_Institute_of_Technology.svg/150px-Seal_of_the_California_Institute_of_Technology.svg.png"
+    },
+    {
+      "name": "Tsinghua University",
+      "abbreviation": "thu",
+      "latitude": 39.9999,
+      "longitude": 116.3269,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Tsinghua_University_Logo.svg/150px-Tsinghua_University_Logo.svg.png"
+    },
+    {
+      "name": "Peking University",
+      "abbreviation": "pku",
+      "latitude": 39.9887,
+      "longitude": 116.3109,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Peking_University_seal.svg/150px-Peking_University_seal.svg.png"
+    },
+    {
+      "name": "Fudan University",
+      "abbreviation": "fdu",
+      "latitude": 31.2990,
+      "longitude": 121.5036,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Fudan_University_Logo.svg/150px-Fudan_University_Logo.svg.png"
+    },
+    {
+      "name": "Ludwig Maximilian University of Munich",
+      "abbreviation": "lmu",
+      "latitude": 48.1500,
+      "longitude": 11.5802,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Sigillum_Universitatis_Ludovico-Maximilianeae.svg/166px-Sigillum_Universitatis_Ludovico-Maximilianeae.svg.png"
+    },
+    {
+      "name": "Technical University of Munich",
+      "abbreviation": "tum",
+      "latitude": 48.2620,
+      "longitude": 11.6673,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Logo_of_the_Technical_University_of_Munich.svg/150px-Logo_of_the_Technical_University_of_Munich.svg.png"
+    },
+    {
+      "name": "Heidelberg University",
+      "abbreviation": "hu",
+      "latitude": 49.4145,
+      "longitude": 8.6819,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Logo_University_of_Heidelberg.svg/215px-Logo_University_of_Heidelberg.svg.png"
+    },
+    {
+      "name": "Australian National University",
+      "abbreviation": "anu",
+      "latitude": -35.2777,
+      "longitude": 149.1186,
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/5/5f/Australian_National_University_coat_of_arms.svg/150px-Australian_National_University_coat_of_arms.svg.png"
+    },
+    {
+      "name": "University of Melbourne",
+      "abbreviation": "uom",
+      "latitude": -37.7982,
+      "longitude": 144.9616,
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b4/The_University_of_Melbourne_Coat_of_Arms.svg/150px-The_University_of_Melbourne_Coat_of_Arms.svg.png"
+    },
+    {
+      "name": "University of Sydney",
+      "abbreviation": "usyd",
+      "latitude": -33.8878,
+      "longitude": 151.1885,
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/University_of_Sydney_coat_of_arms.png/150px-University_of_Sydney_coat_of_arms.png"
+    },
+    {
+      "name": "Lomonosov Moscow State University",
+      "abbreviation": "lmsu",
+      "latitude": 55.7028,
+      "longitude": 37.5308,
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/6/62/Moscow_State_University_CoA.png/220px-Moscow_State_University_CoA.png"
+    },
+    {
+      "name": "Saint Petersburg State University",
+      "abbreviation": "spbu",
+      "latitude": 59.9398,
+      "longitude": 30.2962,
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/7/76/Coat_of_arms_of_SPbU.svg/175px-Coat_of_arms_of_SPbU.svg.png"
+    },
+    {
+      "name": "Novosibirsk State University",
+      "abbreviation": "nsu",
+      "latitude": 54.8430,
+      "longitude": 83.0931,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Novosibirsk_State_University_Logo.svg/300px-Novosibirsk_State_University_Logo.svg.png"
+    },
+    {
+      "name": "University of Toronto",
+      "abbreviation": "uoft",
+      "latitude": 43.6629,
+      "longitude": -79.3957,
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Utoronto_coa.svg/220px-Utoronto_coa.svg.png"
+    },
+    {
+      "name": "University of British Columbia",
+      "abbreviation": "ubc",
+      "latitude": 49.2606,
+      "longitude": -123.2460,
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a0/UBC_COA.svg/110px-UBC_COA.svg.png"
+    },
+    {
+      "name": "McGill University",
+      "abbreviation": "mcgill",
+      "latitude": 45.5048,
+      "longitude": -73.5772,
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/2/29/McGill_University_CoA.svg/110px-McGill_University_CoA.svg.png"
+    },
+    {
+      "name": "IIT Madras",
+      "abbreviation": "iitm",
+      "latitude": 12.9915,
+      "longitude": 80.2337,
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/6/69/IIT_Madras_Logo.svg/200px-IIT_Madras_Logo.svg.png"
+    },
+    {
+      "name": "IIT Delhi",
+      "abbreviation": "iitd",
+      "latitude": 28.5450,
+      "longitude": 77.1926,
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/f/fd/Indian_Institute_of_Technology_Delhi_Logo.svg/220px-Indian_Institute_of_Technology_Delhi_Logo.svg.png"
+    },
+    {
+      "name": "Tata Institute of Fundamental Research",
+      "abbreviation": "tifr",
+      "latitude": 19.0158,
+      "longitude": 72.8562,
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/a/ac/Tata_Institute_of_Fundamental_Research_logo.png/220px-Tata_Institute_of_Fundamental_Research_logo.png"
+    },
+    {
+      "name": "Indian Institute of Science",
+      "abbreviation": "iisc",
+      "latitude": 13.0211,
+      "longitude": 77.5660,
+      "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Indian_Institute_of_Science_2019_logo.svg/150px-Indian_Institute_of_Science_2019_logo.svg.png"
+    },
+    {
+      "name": "Jawaharlal Nehru University",
+      "abbreviation": "jnu",
+      "latitude": 28.5400,
+      "longitude": 77.1666,
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Jawaharlal_Nehru_University_Logo_vectorized.svg/150px-Jawaharlal_Nehru_University_Logo_vectorized.svg.png"
+    }
+
+
+];
+  const markerSvg = ``;
+    
+  // Initialize the overlay state (e.g., 'night')
+  let currentOverlay = 'dark-marble';
+// Gen random data
+  // Gen random data
+  const N = universities.length;
+  // const arcsData = [...Array(N).keys()].map(() => ({
+  //   startLat: (Math.random() - 0.5) * 180,
+  //   startLng: (Math.random() - 0.5) * 360,
+  //   endLat: (Math.random() - 0.5) * 180,
+  //   endLng: (Math.random() - 0.5) * 360,
+  //   color: [['red', 'white', 'blue', 'green'][Math.round(Math.random() * 3)], ['red', 'white', 'blue', 'green'][Math.round(Math.random() * 3)]]
+  // }));
+  const arcsData = universities.map((university) => ({
+  // Use the provided latitude and longitude
+    startLat : (Math.random() - 0.5) * 180,
+    startLng : (Math.random() - 0.5) * 360,
+
+    // Generate an end point (you can adjust this logic as needed)
+    endLat : university.latitude,
+    endLng : university.longitude,
+
+  // Generate a random color (similar to before)
+    color : [
+    ['red', 'white', 'blue', 'green'][Math.round(Math.random() * 3)],
+    ['red', 'white', 'blue', 'green'][Math.round(Math.random() * 3)]
+  ] 
+}));
+  const ringsData = arcsData.map((ar) => ({
+  // Use the provided latitude and longitude
+    lat : ar.startLat,
+    lng : ar.startLng,
+    // // Generate an end point (you can adjust this logic as needed)
+    // endLat : ar.endLat,
+    // endLng : ar.endLng,
+
+  
+}));
+
+
+  
+  const gData = universities.map(univ => ({
+            lat: univ.latitude,
+            lng: univ.longitude,
+            size: 10,
+            color: ['white'],
+            name: univ.name,
+            abbreviation: univ.abbreviation,
+            logo: univ.logo
+        }));
+  
+    const ARC_REL_LEN = 0.8; // relative to whole arc
+    const FLIGHT_TIME = 1000;
+    const NUM_RINGS = 3;
+    const RINGS_MAX_R = 5; // deg
+    const RING_PROPAGATION_SPEED = 5; // deg/sec
+    fetch('https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson').then(res => res.json()).then(countries =>
+    {
+
+        const globe = Globe()
+          .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+          .htmlElementsData(gData)
+          .htmlElement(d => {
+            const el = document.createElement('div');
+            el.innerHTML = `<div class="unilogo-glow" data-institute-name=${d.name} tabindex="1"><img class='unilogo-cover' src=${d.logo} alt="" decoding="async"/><img class='unilogo-blur' src=${d.logo} alt="" decoding="async"/></div>`;
+            el.style.color = d.color;
+            el.style.width = `${d.size}px`;
+
+            el.style['pointer-events'] = 'auto';
+            el.style.cursor = 'pointer';
+            el.onclick = () =>  location.href = `/node_map/${d.abbreviation}`;;
+            return el;
+          })
+          .arcsData(arcsData)
+          .arcColor('color')
+          .onGlobeClick(emitArc)
+          .arcDashLength(ARC_REL_LEN)
+          .arcDashGap(8) //() => Math.random()
+          .arcDashInitialGap(6)
+          .arcDashAnimateTime(() => Math.random() * 4000 + 500)
+    (document.getElementById('globeViz'))
+          .arcsTransitionDuration(2)
+          // .ringsData(ringsData)
+          .ringColor(() => t => `rgba(255,100,50,${1-t})`)
+          .ringMaxRadius(RINGS_MAX_R)
+          .ringPropagationSpeed(RING_PROPAGATION_SPEED)
+          .ringRepeatPeriod(FLIGHT_TIME * ARC_REL_LEN / NUM_RINGS)
+          
+          // .hexPolygonsData(countries.features)
+          //   .hexPolygonResolution(3)
+          //   .hexPolygonMargin(0.3)
+          //   .hexPolygonUseDots(true)
+          //   .hexPolygonColor(() => `#ffffff`)
+          //   .hexPolygonLabel(({ properties: d }) => `
+          //     <b>${d.ADMIN} (${d.ISO_A2})</b> <br />
+          //     Population: <i>${d.POP_EST}</i>
+          //   `)
+          (document.getElementById('globeViz'));
+
+
+          // Auto-rotate
+    globe.controls().autoRotate = true;
+    globe.controls().autoRotateSpeed = 0.5;
+    let prevCoords = { lat: 0, lng: 0 };
+
+
+    function emitArc({ lat: endLat, lng: endLng }) {
+      const { lat: startLat, lng: startLng } = prevCoords;
+      setTimeout(() => { prevCoords = { lat: endLat, lng: endLng }}, FLIGHT_TIME);
+
+      // add and remove arc after 1 cycle
+      const arc = { startLat, startLng, endLat, endLng };
+      // globe.arcsData([...globe.arcsData(), arc]);
+      // setTimeout(() => globe.arcsData(globe.arcsData().filter(d => d !== arc)), FLIGHT_TIME * 2);
+
+      // add and remove start rings
+      const srcRing = { lat: startLat, lng: startLng };
+      // globe.ringsData([...globe.ringsData(), srcRing]);
+      // setTimeout(() => globe.ringsData(globe.ringsData().filter(r => r !== srcRing)), FLIGHT_TIME * ARC_REL_LEN);
+      if (currentOverlay === 'night') {
+          globe.globeImageUrl('//unpkg.com/three-globe/example/img/earth-day.jpg'); // Set day overlay
+          currentOverlay = 'day';
+        } else if (currentOverlay === 'day') {
+          globe.globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg'); // Set dark marble overlay
+          currentOverlay = 'dark-marble';
+        } else {
+          globe.globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg'); // Set night overlay
+          currentOverlay = 'night';
+        }
+      // add and remove target rings
+      // setTimeout(() => {
+      //   const targetRing = { lat: endLat, lng: endLng };
+      //   globe.ringsData([...globe.ringsData(), targetRing]);
+      //   setTimeout(() => globe.ringsData(globe.ringsData().filter(r => r !== targetRing)), FLIGHT_TIME * ARC_REL_LEN);
+      // }, FLIGHT_TIME);
+    }
+
+    
+          });
+          
+
+    
+  </script>
+
+  <script>
+    document.querySelectorAll('.unilogo-glow').forEach(logo => {
+    logo.addEventListener('click', function() {
+        const instituteName = this.dataset.instituteName; // Ensure you add a data-institute-name attribute to your logo div
+        const encodedName = encodeURIComponent(instituteName);
+        fetch(`/institute-mindmap/${encodedName}/`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Here, use the data to create your mindmap
+                // You'll need to use a library like jsMind to render the mindmap
+                let jm = new jsMind(options);
+                jm.show(data);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error.message);
+                // Handle the error appropriately in your UI
+            });
+    });
+});
+  </script>
+{% endblock %}

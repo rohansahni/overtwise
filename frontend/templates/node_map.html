@@ -1,0 +1,167 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<!-- <div id="the-mindmap" class="mindmap"></div> -->
+ <style>
+        body{
+            background-color: #000000;
+            color:#ccc;
+            /* place-items:center; */
+            background:#171717;
+        }
+        svg {
+            border: 1px solid #ccc;
+        }
+        .node text {
+            font-size: 12px;
+            color: white;
+        }
+        #btn-roadmap{
+            position: fixed;
+            bottom:10%;
+            left:45%;
+        }
+        .button{
+            text-decoration:none;
+            font-size:25px;
+            color:#1fe8b6;
+            padding:20px 50px;
+            border:3px solid #1fe8b6;
+            position:relative;
+            }
+            .button::after,
+            .button::before{
+            content:"";
+            position:absolute;
+            width:40px;
+            height:40px;
+            border:inherit;
+            transition:all .5s;
+            }
+            .button::before{
+            top:-15px;
+            left:-15px;
+            border-width:3px 0 0 3px;
+            }
+            .button::after{
+            top:40px;
+            left:86%;
+            border-width:0px 3px 3px 0;
+            }
+            a:hover::before{
+            width:115%;
+            text-decoration: none;
+            height:115%;
+            }
+            a:hover::after{
+            left:-20px;
+            top:1px;
+            width:120%;
+            height:115%;
+            text-decoration: none;
+            }
+    </style>
+    <div id="btn-roadmap"><a href="{% url 'roadmap' institute.slug %}" class="button">Roadmap</a></div>
+<svg width="100%" height="100%"></svg>
+  <script>
+        const width = 1700;
+        const height = 800;
+        const svg = d3.select('svg');
+
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+        const simulation = d3.forceSimulation()
+            .force("link", d3.forceLink().id(d => d.id).distance(150))
+            .force("charge", d3.forceManyBody().strength(-500))
+            .force("center", d3.forceCenter(width / 2, height / 2));
+
+        const institute_slug = "{{ institute.slug }}";
+        d3.json(`/get_institute_nodemap/${institute_slug}/`).then(function(graph) {
+            const link = svg.append("g")
+                .attr("class", "links")
+                .selectAll("line")
+                .data(graph.links)
+                .enter().append("line")
+                .attr("stroke", "#999")
+                .attr("stroke-opacity", 0.6)
+                .attr("stroke-width", 1);
+
+            const node = svg.append("g")
+                .attr("class", "nodes")
+                .selectAll("g")
+                .data(graph.nodes)
+                .enter().append("g")
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended));
+
+            node.append("circle")
+                .attr("r", d => d.size)
+                .attr("fill", d => color(d.type));
+
+            node.append("text")
+                .attr("dx", d => d.size + 5)
+                .attr("dy", ".35em")
+                .attr("fill", "#fff")
+                .text(d => d.name);
+
+            node.append("title")
+                .text(d => d.name);
+
+            simulation
+                .nodes(graph.nodes)
+                .on("tick", ticked);
+
+            simulation.force("link")
+                .links(graph.links);
+
+            function ticked() {
+                link
+                    .attr("x1", d => d.source.x)
+                    .attr("y1", d => d.source.y)
+                    .attr("x2", d => d.target.x)
+                    .attr("y2", d => d.target.y);
+
+                node
+                    .attr("transform", d => `translate(${d.x},${d.y})`);
+            }
+        });
+
+        function dragstarted(d) {
+            if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(d) {
+            d.fx = d3.event.x;
+            d.fy = d3.event.y;
+        }
+
+        function dragended(d) {
+            if (!d3.event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+    </script>
+<!-- <script>
+        // Set the URL for fetching the JSON data
+        const mindmapUrl = " url 'institute_mindmap' institute_name=institute_name ";
+        document.addEventListener('DOMContentLoaded', function() {
+        fetch(mindmapUrl)
+            .then(response => response.json())
+            .then(data => {
+                const mindData = data;
+                // Your code to render the mindmap using mindData
+                console.log(mindData);
+                renderMindmap(mindData); // Assume renderMindmap is your function to draw the mindmap
+            })
+            .catch(error => {
+                console.error('Error fetching mindmap data:', error);
+            });
+    });
+</script> -->
+<!-- <script src="{% static 'js/mindmap.js' %}"></script> -->
+{% endblock %}

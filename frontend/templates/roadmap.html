@@ -1,0 +1,225 @@
+
+{% load static %} 
+{% block content %}
+<!-- <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Roadmap</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        .node {
+            cursor: pointer;
+        }
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 2px;
+        }
+        .label {
+            font-size: 12px; // Adjust text size for better visibility
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="roadmap" data-slug="{{ institute_slug }}"></div>
+    <script src="{% static 'js/roadmap.js' %}"></script>
+</body>
+</html> -->
+
+<script src="https://unpkg.com/gojs/release/go-debug.js"></script>
+
+<div style="display: flex;">
+  <div id="myDiagramDiv" style="flex-grow: 1; height: 970px; background-color: #fff; border: solid 1px black;"></div>
+  <div id="myInspectorDiv" style="width: 250px; height: 970px; background-color: #f1f1f1; border: solid 1px black; padding: 10px;">
+    <h3>Details</h3>
+    <div id="nodeDetails"></div>
+    <button>Start</button>
+  </div>
+</div>
+
+<script>
+    var myDiagram;
+    var $ = go.GraphObject.make;
+
+    function init() {
+    myDiagram = $(go.Diagram, "myDiagramDiv", {
+    "undoManager.isEnabled": true,
+    layout: $(go.TreeLayout, {
+        angle: 90,
+        layerSpacing: 100,
+        nodeSpacing: 50,
+        alignment: go.TreeLayout.AlignmentCenterChildren
+    }),
+        "clickCreatingTool.archetypeNodeData": { name: "new node" },
+        model: $(go.GraphLinksModel, {
+            linkKeyProperty: "key"
+        })
+    });
+
+    myDiagram.nodeTemplate =
+        $(go.Node, "Auto",
+            {
+                click: showNodeDetails
+            },
+            new go.Binding("movable", "isStartNode", function(isStart) {
+                return !isStart;
+            }),
+            $(go.Shape, "RoundedRectangle",
+                {
+                    fill: "white",
+                    stroke: "#00A4EF",
+                    strokeWidth: 2
+                },
+                new go.Binding("fill", "title", function(title) {
+                    switch(title) {
+                        case "Institute": return "#FFD700";
+                        case "Course": return "#90EE90";
+                        case "SubCourse": return "#ADD8E6";
+                        case "Topic": return "#FFA07A";
+                        default: return "white";
+                    }
+                })
+            ),
+            $(go.Panel, "Vertical",
+                { margin: 8 },
+                $(go.TextBlock,
+                    {
+                        margin: 8,
+                        font: "bold 14px sans-serif",
+                        stroke: "#00A4EF",
+                        alignment: go.Spot.Center,
+                        maxSize: new go.Size(120, NaN)
+                    },
+                    new go.Binding("text", "name")
+                ),
+                $(go.TextBlock,
+                    {
+                        margin: 8,
+                        font: "italic 11px sans-serif",
+                        stroke: "#00A4EF",
+                        alignment: go.Spot.Center
+                    },
+                    new go.Binding("text", "title")
+                )
+            )
+        );
+
+    myDiagram.linkTemplate =
+        $(go.Link,
+            { routing: go.Link.Orthogonal, corner: 5 },
+            $(go.Shape, { strokeWidth: 2, stroke: "#00A4EF" }),
+            $(go.Panel, "Auto",
+                { 
+                    segmentIndex: 0.5,
+                    segmentFraction: 0.5,
+                    cursor: "pointer",
+                    click: handleLinkClick
+                },
+                $(go.Shape, "RoundedRectangle", 
+                    { fill: "#F2F2F2", stroke: "#00A4EF", strokeWidth: 1 }),
+                $(go.TextBlock,
+                    { margin: 5, font: "10px sans-serif" },
+                    new go.Binding("text", "text")
+                )
+            ),
+            $(go.Shape, { toArrow: "Standard", stroke: null, fill: "#00A4EF" })
+        );
+
+    // Load the data
+    fetch('/roadmap_data/{{ institute_slug }}/')
+        .then(response => response.json())
+        .then(data => {
+            myDiagram.model = go.Model.fromJson(data);
+        })
+        .catch(error => {
+            console.error('Error loading JSON:', error);
+        });
+}
+
+function showNodeDetails(e, obj) {
+    var node = obj.part;
+    if (node) {
+        var data = node.data;
+        var detailsDiv = document.getElementById("nodeDetails");
+        var html = "<h4>" + data.name + "</h4>";
+        html += "<p><strong>Type:</strong> " + data.title + "</p>";
+        if (data.comments) {
+            html += "<p><strong>Description:</strong> " + data.comments + "</p>";
+        }
+        if (data.url) {
+            html += "<p><strong>URL:</strong> <a href='" + data.url + "' target='_blank'>" + data.url + "</a></p>";
+        }
+        if (data.progress) {
+            html += "<p><strong>Status:</strong> Completed</p>";
+        } else {
+            html += "<p><strong>Status:</strong> Not completed</p>";
+        }
+        if (data.title === "Course" && data.progress) {
+            html += "<button onclick='joinCourseRoom(\"" + data.key + "\")'>Join Course Room</button>";
+        }
+        detailsDiv.innerHTML = html;
+    }
+}
+
+function handleLinkClick(e, obj) {
+    var link = obj.part;
+    if (link) {
+        var data = link.data;
+        if (data.testUrl) {
+            window.open(data.testUrl, '_blank');
+        } else if (data.assessmentUrl) {
+            window.open(data.assessmentUrl, '_blank');
+        } else if (data.assignmentUrl) {
+            window.open(data.assignmentUrl, '_blank');
+        }
+    }
+}
+
+function joinCourseRoom(courseKey) {
+    fetch('/join_course_room/' + courseKey.split('-')[1] + '/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Joined course room successfully!');
+        } else {
+            alert('Failed to join course room');
+        }
+    });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+function handleLinkClick(e, obj) {
+    var link = obj.part;
+    if (link) {
+        var data = link.data;
+        if (data.url) {
+            window.open(data.url, '_blank');
+        }
+    }
+}
+
+window.addEventListener('DOMContentLoaded', init);
+</script>
+
+
+{% endblock %}

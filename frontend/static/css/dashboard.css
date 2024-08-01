@@ -1,0 +1,23 @@
+.unilogo-glow {
+    display: grid;
+    grid-template-areas: "one";
+    transition: scale 200ms;
+}
+.unilogo-cover{
+    border-radius: 50%;
+    background-color:white;
+}
+.unilogo-cover, .unilogo-blur {
+    width:35px;
+    grid-area: one;
+}
+.unilogo-blur {
+    transform: scale(1.1);
+    filter: blur(40px);
+    z-index: -1;
+}
+
+.unilogo-glow:hover, .unilogo-glow:focus-within {
+    outline: none;
+    transform: scale(2.05);
+}

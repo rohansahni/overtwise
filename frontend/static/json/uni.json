@@ -1,0 +1,49 @@
+{
+  "universities": [
+    {
+      "country": "United States",
+      "institutions": [
+        {
+          "name": "Harvard University",
+          "lat": 42.377,
+          "lng": -71.1167
+        },
+        {
+          "name": "Stanford University",
+          "lat": 37.4275,
+          "lng": -122.1697
+        }
+      ]
+    },
+    {
+      "country": "United Kingdom",
+      "institutions": [
+        {
+          "name": "University of Oxford",
+          "lat": 51.7548,
+          "lng": -1.2544
+        },
+        {
+          "name": "University of Cambridge",
+          "lat": 52.2043,
+          "lng": 0.1149
+        }
+      ]
+    },
+    {
+      "country": "Germany",
+      "institutions": [
+        {
+          "name": "Technical University of Munich",
+          "lat": 48.1496,
+          "lng": 11.568
+        },
+        {
+          "name": "University of Heidelberg",
+          "lat": 49.4093,
+          "lng": 8.706
+        }
+      ]
+    }
+  ]
+}

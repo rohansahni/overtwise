@@ -1,0 +1,18 @@
+{% extends 'index.html' %} {% load static %} {% block content %}
+<link rel="stylesheet" href="{% static 'css/assessment.css' %}" />
+<div id="start-screen" class="screen">
+  <span id="start" class="button">Start</span>
+</div>
+<span id="main"></span>
+
+<div class="screen">
+  <div class="question">
+    <div class="question-text score-message">Well done! Here are your scores!</div>
+    <div class="score-center">
+      
+    </div>
+  </div>
+</div>
+<script src="{% static 'js/assessment.js' %}"></script>
+
+{% endblock %}
