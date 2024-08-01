@@ -5,7 +5,7 @@ possess and those required by the job market. Unequal access to skilling opportu
 Furthermore, gender inequality and the lack of accessible training for disabled individuals deepen these gaps, limiting
 opportunities for many. Tackling these problems is essential for creating a fair and inclusive job market.
 
-## Our Solution:
+##
 ### OVERTWISE
 Every student aspires to receive a high-quality education from top-tier colleges, but only a small fraction actually secures admission to these prestigious institutions. For instance, the IITs admit just 0.08% of applicants. Unfortunately, in our country, access to excellent education remains limited for the majority of students. Amid this scarcity, there exist only a few ‘islands of excellence’ amidst a vast ocean of mediocrity. Additionally, academic freedom is often lacking.
 In today’s rapidly evolving job market, there’s a notable skills gap between what young people 
